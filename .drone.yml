@@ -7,6 +7,26 @@ platform:
   os: linux
   arch: amd64
 
+
+stage('Check twistcli version') {
+
+  def TCLI_VERSION = sh(script: "./twistcli | grep -A1 VERSION | sed 1d", returnStdout:true).trim()
+  def CONSOLE_VERSION = sh(script: "curl -k -u \"mredmond_paloaltonetworks_com:1qaz2wsx3edc\" https://console-master-fourthbuild.mredmond.demo.twistlock.com/api/v1/version | tr -d \'\"'", returnStdout:true).trim()
+
+  println "TCLI_VERSION = $TCLI_VERSION"
+  println "CONSOLE_VERSION = $CONSOLE_VERSION"
+
+  if ("$TCLI_VERSION" != "$CONSOLE_VERSION") {
+    println "downloading twistcli"
+    sh 'curl -k -u mredmond_paloaltonetworks_com:1qaz2wsx3edc --output ./twistcli https://console-master-fourthbuild.mredmond.demo.twistlock.com/api/v1/util/twistcli'
+    sh 'sudo chmod a+x ./twistcli'
+  }
+}
+
+stage('Scan with Twistcli') {
+  sh './twistcli images scan --address https://console-master-fourthbuild.mredmond.demo.twistlock.com/ -u mredmond_paloaltonetworks_com -p 1qaz2wsx3edc --details $IMAGE'
+}
+
 steps:
 - name: greeting
   commands:
