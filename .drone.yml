@@ -2,12 +2,6 @@
 kind: pipeline
 name: default
 
-
-
-stage('Scan with Twistcli') {
-  sh './twistcli images scan --address https://console-master-fourthbuild.mredmond.demo.twistlock.com/ -u mredmond_paloaltonetworks_com -p 1qaz2wsx3edc --details $IMAGE'
-}
-
 steps:
 - name: greeting
   commands:
