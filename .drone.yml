@@ -3,11 +3,6 @@ kind: pipeline
 name: default
 
 steps:
-- name: greeting
-  commands:
-  - echo hello world
-
-steps:
 - name: build
   image: nginx:latest
   commands:
